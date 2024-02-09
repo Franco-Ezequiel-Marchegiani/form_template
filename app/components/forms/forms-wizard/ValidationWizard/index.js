@@ -13,7 +13,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // step options
 const steps = ['Carga Encabezados', 'Carga Detalle', 'Revisión'];
 
-const getStepContent = (step, handleNext, handleBack, setErrorIndex, shippingData, setShippingData, paymentData, setPaymentData) => {
+const getStepContent = (step, handleNext, handleBack, setErrorIndex, encabezadosData, setEncabezadosData, partidaItemData, setPartidaItemData) => {
     //ACÁ SE CARGA LOS COMPONENTES SEGÚN EL PASO A PASO
     switch (step) {
         case 0:
@@ -21,8 +21,8 @@ const getStepContent = (step, handleNext, handleBack, setErrorIndex, shippingDat
                 <AddressForm
                     handleNext={handleNext}
                     setErrorIndex={setErrorIndex}
-                    shippingData={shippingData}
-                    setShippingData={setShippingData}
+                    encabezadosData={encabezadosData}
+                    setEncabezadosData={setEncabezadosData}
                 />
             );
         case 1:
@@ -31,8 +31,8 @@ const getStepContent = (step, handleNext, handleBack, setErrorIndex, shippingDat
                     handleNext={handleNext}
                     handleBack={handleBack}
                     setErrorIndex={setErrorIndex}
-                    paymentData={paymentData}
-                    setPaymentData={setPaymentData}
+                    partidaItemData={partidaItemData}
+                    setPartidaItemData={setPartidaItemData}
                 />
             );
         case 2:
@@ -46,10 +46,12 @@ const getStepContent = (step, handleNext, handleBack, setErrorIndex, shippingDat
 
 const ValidationWizard = () => {
     const [activeStep, setActiveStep] = React.useState(0);
-    const [shippingData, setShippingData] = React.useState({});
-    const [paymentData, setPaymentData] = React.useState({});
+    const [encabezadosData, setEncabezadosData] = React.useState({});
+    const [partidaItemData, setPartidaItemData] = React.useState({});
     const [errorIndex, setErrorIndex] = React.useState(0);
 
+
+    console.log(partidaItemData);
     const handleNext = () => {
         setActiveStep(activeStep + 1);
         setErrorIndex(null);
@@ -98,8 +100,8 @@ const ValidationWizard = () => {
                                     variant="contained"
                                     color="error"
                                     onClick={() => {
-                                        setShippingData({});
-                                        setPaymentData({});
+                                        setEncabezadosData({});
+                                        setPartidaItemData({});
                                         setActiveStep(0);
                                     }}
                                     sx={{ my: 3, ml: 1 }}
@@ -116,10 +118,10 @@ const ValidationWizard = () => {
                             handleNext,
                             handleBack,
                             setErrorIndex,
-                            shippingData,
-                            setShippingData,
-                            paymentData,
-                            setPaymentData
+                            encabezadosData,
+                            setEncabezadosData,
+                            partidaItemData,
+                            setPartidaItemData
                         )}
                         {activeStep === steps.length - 1 && (
                             <Stack direction="row" justifyContent={activeStep !== 0 ? 'space-between' : 'flex-end'}>

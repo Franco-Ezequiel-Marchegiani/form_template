@@ -1,5 +1,5 @@
 // material-ui
-import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography, TextField, Autocomplete } from '@mui/material';
 import React from 'react';
 // project imports
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -12,42 +12,42 @@ const validationSchema = yup.object({
     empresa: yup.string().required('empresa es un campo obligatorio'),
     tipo: yup.string().required('tipo es un campo obligatorio'),
     embarque: yup.string().required('embarque es un campo obligatorio'),
-    numero_despacho: yup.string().required('numero es un campo obligatorio'),
+    numero_despacho: yup.string().required('numero_despacho es un campo obligatorio'),
     usuario: yup.string().required('usuario es un campo obligatorio')
 });
 
 // ==============================|| FORM WIZARD - VALIDATION  ||============================== //
 
-const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex }) => {
+const AddressForm = ({ encabezadosData, setEncabezadosData, handleNext, setErrorIndex }) => {
     const formik = useFormik({
         initialValues: {
-            empresa: shippingData.empresa,
-            tipo: shippingData.tipo,
-            embarque: shippingData.embarque,
-            numero_despacho: shippingData.numero_despacho,
-            usuario: shippingData.usuario
+            empresa: encabezadosData.empresa,
+            tipo: encabezadosData.tipo,
+            embarque: encabezadosData.embarque,
+            numero_despacho: encabezadosData.numero_despacho,
+            usuario: encabezadosData.usuario
         },
         validationSchema,
         onSubmit: (values) => {
-            setShippingData({
+            setEncabezadosData({
                 empresa: values.empresa,
                 tipo: values.tipo,
                 embarque: values.embarque,
-                numero: values.numero,
+                numero_despacho: values.numero_despacho,
                 usuario: values.usuario
             });
             handleNext();
         }
     });
-    console.log('Muestra info comp');
+
     return (
-        <>
+        <Grid justifyContent="center" xs={12}>
             <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
                 Complete cada campo del formulario
             </Typography>
             <form onSubmit={formik.handleSubmit} id="validation-forms">
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={4}>
                         <TextField_Component
                             param_id="empresa"
                             param_name="empresa"
@@ -56,38 +56,67 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex 
                             param_onChange={formik.handleChange}
                             param_error={formik.touched.empresa && Boolean(formik.errors.empresa)}
                             param_helperText={formik.touched.empresa && formik.errors.empresa}
+                            autoComplete={true}
+                            options={['Disbyte_Arg','Matmax_Arg','Splinter_Arg', 'Disbyte_Bra', 'Disbyte_Col', 'Disbyte_Mex']}
+                            param_onChange_Options={formik.setFieldValue}
+                            param_onBlur_Options={formik.setFieldTouched}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="lastName"
-                            name="lastName"
-                            label="Last Name *"
-                            value={formik.values.lastName}
-                            onChange={formik.handleChange}
-                            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                            helperText={formik.touched.lastName && formik.errors.lastName}
-                            fullWidth
-                            autoComplete="family-name"
+                    <Grid item xs={12} sm={4}>
+                        <TextField_Component
+                            param_id="tipo"
+                            param_name="tipo"
+                            param_label="tipo"
+                            param_value={formik.values.tipo}
+                            param_onChange={formik.handleChange}
+                            param_error={formik.touched.tipo && Boolean(formik.errors.tipo)}
+                            param_helperText={formik.touched.tipo && formik.errors.tipo}
+                            autoComplete={true}
+                            options={['Presupuesto','Provisorio', 'Final']}
+                            param_onChange_Options={formik.setFieldValue}
+                            param_onBlur_Options={formik.setFieldTouched}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="address1" name="address1" label="Address line 1" fullWidth autoComplete="shipping address-line1" />
+                    <Grid item xs={12} sm={4}>
+                        <TextField_Component
+                            param_id="embarque"
+                            param_name="embarque"
+                            param_label="embarque"
+                            param_value={formik.values.embarque}
+                            param_onChange={formik.handleChange}
+                            param_error={formik.touched.embarque && Boolean(formik.errors.embarque)}
+                            param_helperText={formik.touched.embarque && formik.errors.embarque}
+                            autoComplete={false}
+                            options={''}
+                        />
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="address2" name="address2" label="Address line 2" fullWidth autoComplete="shipping address-line2" />
+                    <Grid item xs={12} sm={4}>
+                        <TextField_Component
+                            param_id="numero_despacho"
+                            param_name="numero_despacho"
+                            param_label="numero_despacho"
+                            param_value={formik.values.numero_despacho}
+                            param_onChange={formik.handleChange}
+                            param_error={formik.touched.numero_despacho && Boolean(formik.errors.numero_despacho)}
+                            param_helperText={formik.touched.numero_despacho && formik.errors.numero_despacho}
+                            autoComplete={false}
+                            options={''}
+                        />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField id="city" name="city" label="City" fullWidth autoComplete="shipping address-level2" />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField id="state" name="state" label="State/Province/Region" fullWidth />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField id="zip" name="zip" label="Zip / Postal code" fullWidth autoComplete="shipping postal-code" />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField id="country" name="country" label="Country" fullWidth autoComplete="shipping country" />
+                    <Grid item xs={12} sm={4}>
+                        <TextField_Component
+                            param_id="usuario"
+                            param_name="usuario"
+                            param_label="usuario"
+                            param_value={formik.values.usuario}
+                            param_onChange={formik.handleChange}
+                            param_error={formik.touched.usuario && Boolean(formik.errors.usuario)}
+                            param_helperText={formik.touched.usuario && formik.errors.usuario}
+                            autoComplete={true}
+                            options={[ 'Dario S.', 'Matias V.', 'Nicolas G.', 'Florencia C.', 'Cristian P.', 'Diego C.', 'Sebastian V.', 'German G.', 'Pablo D.', 'Damian C.', 'Juani M.', 'Ignacio D.', 'Pablo B.', 'Agustin F.', 'Pablo E.', 'Andres D.', 'Agustin M.', 'Franco M.']}
+                            param_onChange_Options={formik.setFieldValue}
+                            param_onBlur_Options={formik.setFieldTouched}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <FormControlLabel
@@ -106,7 +135,7 @@ const AddressForm = ({ shippingData, setShippingData, handleNext, setErrorIndex 
                     </Grid>
                 </Grid>
             </form>
-        </>
+        </Grid>
     );
 };
 

@@ -13,10 +13,8 @@ import ValidationWizard from 'components/forms/forms-wizard/ValidationWizard';
 const FormsWizard = () => (
     <Layout variant={LAYOUT.main}>
         <Grid container spacing={gridSpacing} justifyContent="center">
-            <Grid item xs={12} md={9} lg={7}>
-                <BasicWizard />
-            </Grid>
-            <Grid item xs={12} md={9} lg={7}>
+            
+            <Grid item xs={12} md={9} lg={12}>
                 <ValidationWizard />
             </Grid>
         </Grid>
