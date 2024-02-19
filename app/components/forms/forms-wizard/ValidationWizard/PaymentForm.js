@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 // material-ui
 import { Button, Checkbox, FormControlLabel, Grid, Stack, TextField, Typography } from '@mui/material';
 
@@ -8,6 +10,8 @@ import TextField_Component from './Form_TextField.js';
 // third-party
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import PaymentFormChild from './PaymentForm_Child.js';
+import { v4 as uuidv4 } from 'uuid'; // uuid para generar identificadores únicos
 
 const validationSchema = yup.object({
     fecha_despacho: yup
@@ -42,6 +46,21 @@ const validationSchema = yup.object({
 // ==============================|| FORM WIZARD - VALIDATION  ||============================== //
 
 export default function PaymentForm({ partidaItemData, setPartidaItemData, handleNext, handleBack, setErrorIndex }) {
+
+    // Estado inicial con un formulario único
+    const [formIds, setFormIds] = useState([uuidv4()]);
+
+    //Función para añadir diversos formularios
+    const addFormChild = () => {
+        setFormIds(currentIds => [...currentIds, uuidv4()]);
+    };
+    //Función para eliminar campos por ID
+    const removeFormChild = (idToRemove) => {
+        //Una vez que se ejecuta
+        setFormIds(currentIds => currentIds.filter(id => id !== idToRemove));
+    };
+    
+
     const formik = useFormik({
         initialValues: {
             purchase_order: partidaItemData.purchase_order,
@@ -72,110 +91,27 @@ export default function PaymentForm({ partidaItemData, setPartidaItemData, handl
             <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
                 Detalles Costo
             </Typography>
+            
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3}> 
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="purchase_order"
-                            param_name="purchase_order"
-                            param_label="purchase_order"
-                            param_value={formik.values.purchase_order}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.purchase_order && Boolean(formik.errors.purchase_order)}
-                            param_helperText={formik.touched.purchase_order && formik.errors.purchase_order}
-                            autoComplete={false}
-                            options={['']}
+                    {formIds.map((id)  => (
+                        <PaymentFormChild
+                            key={id}
+                            id={id} //Iteramos el id del array de formIds para que c/u sea único
+                            formik={formik}
+                            handleNext={handleNext}
+                            handleBack={handleBack}
+                            setErrorIndex={setErrorIndex}
+                            partidaItemData={partidaItemData}
+                            setPartidaItemData={setPartidaItemData}
+                            removeForm={() => removeFormChild(id)} //Pasamos por parámetro la función.
+                            canRemove={formIds.length > 1} //Añadimos para que NO pueda remover si es menor a 1
+
                         />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                    <TextField_Component
-                            param_id="fecha_despacho"
-                            param_name="fecha_despacho"
-                            param_label="fecha_despacho"
-                            param_value={formik.values.fecha_despacho}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.fecha_despacho && Boolean(formik.errors.fecha_despacho)}
-                            param_helperText={formik.touched.fecha_despacho && formik.errors.fecha_despacho}
-                            autoComplete={false}
-                            options={['']}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="sku"
-                            param_name="sku"
-                            param_label="sku"
-                            param_value={formik.values.sku}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.sku && Boolean(formik.errors.sku)}
-                            param_helperText={formik.touched.sku && formik.errors.sku}
-                            autoComplete={true}
-                            options={listado_sku_prov}
-                            param_onChange_Options={formik.setFieldValue}
-                            param_onBlur_Options={formik.setFieldTouched}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="denominacion"
-                            param_name="denominacion"
-                            param_label="denominacion"
-                            param_value={formik.values.denominacion}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.denominacion && Boolean(formik.errors.denominacion)}
-                            param_helperText={formik.touched.denominacion && formik.errors.denominacion}
-                            autoComplete={false}
-                            options={['']}
-                            
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="tipo_de_bien"
-                            param_name="tipo_de_bien"
-                            param_label="tipo_de_bien"
-                            param_value={formik.values.tipo_de_bien}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.tipo_de_bien && Boolean(formik.errors.tipo_de_bien)}
-                            param_helperText={formik.touched.tipo_de_bien && formik.errors.tipo_de_bien}
-                            autoComplete={false}
-                            options={['']}
-                            
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="costo_usd"
-                            param_name="costo_usd"
-                            param_label="costo_usd"
-                            param_value={formik.values.costo_usd}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.costo_usd && Boolean(formik.errors.costo_usd)}
-                            param_helperText={formik.touched.costo_usd && formik.errors.costo_usd}
-                            autoComplete={false}
-                            options={['']}
-                            
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={1.7}>
-                        <TextField_Component
-                            param_id="cantidad"
-                            param_name="cantidad"
-                            param_label="cantidad"
-                            param_value={formik.values.cantidad}
-                            param_onChange={formik.handleChange}
-                            param_error={formik.touched.cantidad && Boolean(formik.errors.cantidad)}
-                            param_helperText={formik.touched.cantidad && formik.errors.cantidad}
-                            autoComplete={false}
-                            options={['']}
-                            
-                        />
-                    </Grid>
+                    ))}
                     <Grid item xs={12}>
-                        <FormControlLabel
-                            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-                            label="Remember credit card details for next time"
-                        />
+                        <Button onClick={addFormChild}>Añadir otro formulario</Button>
+
                     </Grid>
                     <Grid item xs={12}>
                         <Stack direction="row" justifyContent="space-between">

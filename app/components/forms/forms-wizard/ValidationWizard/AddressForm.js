@@ -119,12 +119,6 @@ const AddressForm = ({ encabezadosData, setEncabezadosData, handleNext, setError
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <FormControlLabel
-                            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-                            label="Use this address for payment details"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
                         <Stack direction="row" justifyContent="flex-end">
                             <AnimateButton>
                                 <Button variant="contained" sx={{ my: 3, ml: 1 }} type="submit" onClick={() => setErrorIndex(0)}>

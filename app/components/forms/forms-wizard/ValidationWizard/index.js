@@ -51,6 +51,7 @@ const ValidationWizard = () => {
     const [errorIndex, setErrorIndex] = React.useState(0);
 
 
+    console.log(encabezadosData);
     console.log(partidaItemData);
     const handleNext = () => {
         setActiveStep(activeStep + 1);
